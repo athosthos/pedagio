@@ -18,7 +18,7 @@ palavras_chave_input = st.text_input("Quais palavras devemos procurar? (Separe p
 
 # Cria um input de números, que serve para selecionar em qual coluna está o valor para somar
 posicao_valor = st.number_input(
-    "Posição do valor na linha ( -2 = penúltimo, -1 = último, 0 = primeiro, 2 = segundo [...]):",
+    "Posição da coluna em que está o valor a ser calculado ( -2 = penúltimo, -1 = último, 0 = primeiro, 2 = segundo [...]):",
     value=1, # Começa no 1 por padrão
     step=1 # Pula de 1 em 1
 )
