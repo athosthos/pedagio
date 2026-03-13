@@ -13,8 +13,15 @@ st.write("Anexe o extrato em PDF, defina as palavras-chave (separadas por vírgu
 # Criando um input do tipo PDF
 uploaded_file = st.file_uploader("Selecione o PDF do extrato", type="pdf")
 
-# Criando um input de palavras-chaves
+# Criando um input de palavras-chaves para procurar nas linhas do PDF
 palavras_chave_input = st.text_input("Quais palavras devemos procurar? (Separe por vírgula)", value="PASSAGEM PEDAGIO")
+
+# Cria um input de números, que serve para selecionar em qual coluna está o valor para somar
+posicao_valor = st.number_input(
+    "Posição do valor na linha ( -2 = penúltimo, -1 = último, 0 = primeiro, 2 = segundo [...]):",
+    value=1, # Começa no 1 por padrão
+    step=1 # Pula de 1 em 1
+)
 
 # Se o input de PDF e palavras-chaves estiver preenchido
 if uploaded_file is not None and palavras_chave_input:
@@ -44,21 +51,25 @@ if uploaded_file is not None and palavras_chave_input:
                                 if any(palavra in linha_minuscula for palavra in lista_palavras_chave if palavra):
                                     
                                     # Se encontrar a palavra chave, ele vai procurar o valor padrão (numero negativo com 1 a 3 numeros) na linha 
-                                    valores_encontrados = re.findall(padrao_valor, linha)
-                                    
-                                    # Se tiver 2 ou mais pedágios, ele realiza o cálculo
-                                    if len(valores_encontrados) >= 2:
-                                        valor_str = valores_encontrados[-2] # Pega a penultima coluna do pdf, que é onde está o valor do pedágio
-                                        valor_formatado = valor_str.replace('.', '').replace(',', '.') # Troca as virgulas pelos pontos e os pontos pelas virgulas
-                                        valor_float = abs(float(valor_formatado)) # Transforma em float e remove o sinal negativo
-                                        
-                                        total_pedagio += valor_float # Soma na variável de "total_pedagio"
-                                        
-                                        # Cria um dicionário com a linha do extrato que possui a cobrança do pedágio e o valor do pedágio
-                                        lista_passagens.append({
-                                            "Linha do Extrato": linha.strip(),
-                                            "Valor (R$)": valor_float
-                                        })
+                                    valores_encontrados = re.findall(padrao_valor, linha)                                
+                                 
+                                    # Se encontrar alguma palavra-chave
+                                    if valores_encontrados:
+                                        try:
+                                            valor_str = valores_encontrados[int(posicao_valor)] # Procura o valor do pedágio na coluna passada em "posicao_valor"
+                                            valor_formatado = valor_str.replace('.', '').replace(',', '.') # Troca as virgulas pelos pontos e os pontos pelas virgulas
+                                            valor_float = abs(float(valor_formatado)) # Transforma em float e remove o sinal negativo
+                                            
+                                            total_pedagio += valor_float # Soma na variável de "total_pedagio"
+                                            
+                                            # Cria um dicionário com a linha do extrato que possui a cobrança do pedágio e o valor do pedágio
+                                            lista_passagens.append({
+                                                "Linha do Extrato": linha.strip(),
+                                                "Valor (R$)": valor_float
+                                            })
+                                        # Se a linha não tiver valores suficientes para a posição escolhida, ele ignora sem dar erro
+                                        except IndexError:
+                                            pass
                 
                 # Se existir uma lista de passagens no pedágio
                 if lista_passagens:
