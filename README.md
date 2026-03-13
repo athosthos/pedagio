@@ -8,6 +8,7 @@ Criado para poupar o tempo de ler o extrato linha por linha todo mês, o app ide
 
 * **Leitura de PDF:** Lê diretamente o arquivo do extrato bancário.
 * **Busca Inteligente:** Aceita múltiplas palavras-chave (ex: `PASSAGEM PEDAGIO, SEM PARAR, VELOE`).
+* **Coluna dos Descontos:** Você mesmo decide em qual coluna será realizada soma.
 * **Cálculo Automático:** Encontra o valor exato na linha da cobrança, ignora o sinal negativo de saídas da conta e soma o total.
 * **Tabela Interativa:** Exibe um detalhamento na tela com a linha do extrato e o valor de cada passagem.
 * **Exportação para Excel:** Botão para baixar a tabela em `.csv` já formatado para o padrão brasileiro (separador por ponto e vírgula, decimais com vírgula e acentuação corrigida).
